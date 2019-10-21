@@ -17,17 +17,20 @@ describe Oystercard do
   context 'with balance' do
     before do 
       card.top_up(50)
+      card.touch_in
     end
 
     it 'touch in card' do
-      card.touch_in
       expect(card.in_journey).to be true
     end
 
     it 'touch out card' do
-      card.touch_in
       card.touch_out
       expect(card.in_journey).to be false
+    end
+
+    it 'touch out card reduces balance by minimum fare' do
+      expect { card.touch_out }.to change{ card.balance }.by -1
     end
   end
 
@@ -48,12 +51,5 @@ describe Oystercard do
       expect { card.top_up 100 }.to raise_error(RuntimeError, "top up limit #{Oystercard::LIMIT} reached")
     end
   end
-
-  describe '#deduct' do
-    it 'can deduct from balance' do
-      expect { card.deduct 10 }.to change{ card.balance }.by -10
-    end
-  end
-
 
 end
