@@ -22,6 +22,16 @@ end
     end
   end
 
+  context 'touch_out' do
+
+    it 'touch out card' do
+      card.touch_in
+      card.touch_out
+      expect(card.in_journey).to be false
+    end
+  end
+
+
   describe '#top_up' do
 
     it 'can top up the balance' do
