@@ -9,9 +9,18 @@ context 'new card' do
     end
 
     it 'in_journey? is false' do
-      expect { is_expected.to_not be_in_journey }
+
+      expect(card.in_journey).to be false
     end
 end
+
+  context 'touch_in' do
+
+    it 'touch in card' do
+      card.touch_in
+      expect(card.in_journey).to be true
+    end
+  end
 
   describe '#top_up' do
 
