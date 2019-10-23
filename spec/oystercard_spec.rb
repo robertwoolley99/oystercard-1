@@ -3,6 +3,7 @@ require "oystercard"
 describe Oystercard do
   subject(:card) { Oystercard.new }
   let(:origin) { double :station }
+  let(:destination) { double :station }
 
   context 'new card' do
     it 'initialise oystercard with balance of 0' do
@@ -10,8 +11,11 @@ describe Oystercard do
     end
 
     it 'in journey? is false' do
-
       expect(card).not_to be_in_journey
+    end
+
+    it 'journey history is empty' do
+      expect(card.journey_history).to be_empty
     end
   end
 
@@ -24,25 +28,30 @@ describe Oystercard do
     it 'sets journey status' do
       expect(card).to be_in_journey
     end
+  end
 
-    it 'sets entry station' do
-      expect(card.entry_station).to eq origin
+  context 'with balance, touch in and touch out' do
+    before do
+      card.top_up(50)
+      card.touch_in(origin)
+      card.touch_out(destination)
     end
 
     it 'touch out card sets journey status' do
-      card.touch_out
       expect(card).not_to be_in_journey
     end
 
-    it 'touch out sets entry_station to nil' do
-      card.touch_out
-      expect(card.entry_station).to eq nil
-    end
-
     it 'touch out card reduces balance by minimum fare' do
-      expect { card.touch_out }.to change{ card.balance }.by -1
+      expect { card.touch_out(destination) }.to change{ card.balance }.by -1
     end
 
+    it 'touch out card updates journey history' do
+      expect(card.journey_history).to eq([{ origin: origin, destination: destination }])
+    end
+
+    it 'creates one journey after touch in and out' do
+      expect(card.journey_history.length).to eq 1
+    end
   end
 
   context 'without balance' do
