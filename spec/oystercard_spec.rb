@@ -2,42 +2,53 @@ require "oystercard"
 
 describe Oystercard do
   subject(:card) { Oystercard.new }
+  let(:origin) { double :station }
 
   context 'new card' do
     it 'initialise oystercard with balance of 0' do
       expect(card.balance).to eq 0
     end
 
-    it 'in_journey? is false' do
+    it 'in journey? is false' do
 
-      expect(card.in_journey).to be false
+      expect(card).not_to be_in_journey
     end
   end
 
-  context 'with balance' do
-    before do 
+  context 'with balance and touch in' do
+    before do
       card.top_up(50)
-      card.touch_in
+      card.touch_in(origin)
     end
 
-    it 'touch in card' do
-      expect(card.in_journey).to be true
+    it 'sets journey status' do
+      expect(card).to be_in_journey
     end
 
-    it 'touch out card' do
+    it 'sets entry station' do
+      expect(card.entry_station).to eq origin
+    end
+
+    it 'touch out card sets journey status' do
       card.touch_out
-      expect(card.in_journey).to be false
+      expect(card).not_to be_in_journey
+    end
+
+    it 'touch out sets entry_station to nil' do
+      card.touch_out
+      expect(card.entry_station).to eq nil
     end
 
     it 'touch out card reduces balance by minimum fare' do
       expect { card.touch_out }.to change{ card.balance }.by -1
     end
+
   end
 
   context 'without balance' do
 
     it 'check minimum balance on touch in' do
-      expect { card.touch_in }.to raise_error("Balance too low to touch in. Minimum balance is £#{Oystercard::MINIMUM_BALANCE}")
+      expect { card.touch_in(origin) }.to raise_error("Balance too low to touch in. Minimum balance is £#{Oystercard::MINIMUM_BALANCE}")
     end
   end
 
