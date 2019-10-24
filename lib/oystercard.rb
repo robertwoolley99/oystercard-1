@@ -2,7 +2,7 @@ class Oystercard
   attr_reader :balance, :journey_history
 
   LIMIT = 90
-  MINIMUM_BALANCE = 1
+  MIN_FARE = 1
 
   def initialize
     @balance = 0
@@ -16,21 +16,21 @@ class Oystercard
     @balance += value
   end
 
-  def touch_in(origin)
-    raise "Balance too low to touch in. Minimum balance is £#{MINIMUM_BALANCE}" if @balance < MINIMUM_BALANCE
+  def touch_in(entry)
+    raise "Balance too low to touch in. Minimum fare is £#{MIN_FARE}" if @balance < MIN_FARE
 
-    @current_journey[:origin] = origin
+    @current_journey[:entry] = entry
   end
 
-  def touch_out(destination)
+  def touch_out(exit)
     deduct(1)
-    @current_journey[:destination] = destination
+    @current_journey[:exit] = exit
     @journey_history << @current_journey
     @current_journey = {}
   end
 
   def in_journey?
-    @current_journey.key?(:origin) && !@current_journey.key?(:destination)
+    @current_journey.key?(:entry) && !@current_journey.key?(:exit)
   end
 
   private

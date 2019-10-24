@@ -2,30 +2,16 @@ require "oystercard"
 
 describe Oystercard do
   subject(:card) { Oystercard.new }
-  let(:origin) { double :station }
-  let(:destination) { double :station }
-
-  context 'new card' do
-    it 'initialise oystercard with balance of 0' do
-      expect(card.balance).to eq 0
-    end
-
-    it 'in journey? is false' do
-      expect(card).not_to be_in_journey
-    end
-
-    it 'journey history is empty' do
-      expect(card.journey_history).to be_empty
-    end
-  end
+  let(:entry) { double :station }
+  let(:exit) { double :station }
 
   context 'with balance and touch in' do
     before do
       card.top_up(50)
-      card.touch_in(origin)
+      card.touch_in(entry)
     end
 
-    it 'sets journey status' do
+    it 'is "in journey"' do
       expect(card).to be_in_journey
     end
   end
@@ -33,8 +19,8 @@ describe Oystercard do
   context 'with balance, touch in and touch out' do
     before do
       card.top_up(50)
-      card.touch_in(origin)
-      card.touch_out(destination)
+      card.touch_in(entry)
+      card.touch_out(exit)
     end
 
     it 'touch out card sets journey status' do
@@ -42,11 +28,11 @@ describe Oystercard do
     end
 
     it 'touch out card reduces balance by minimum fare' do
-      expect { card.touch_out(destination) }.to change{ card.balance }.by -1
+      expect { card.touch_out(exit) }.to change{ card.balance }.by -1
     end
 
     it 'touch out card updates journey history' do
-      expect(card.journey_history).to eq([{ origin: origin, destination: destination }])
+      expect(card.journey_history).to eq([{ entry: entry, exit: exit }])
     end
 
     it 'creates one journey after touch in and out' do
@@ -57,7 +43,7 @@ describe Oystercard do
   context 'without balance' do
 
     it 'check minimum balance on touch in' do
-      expect { card.touch_in(origin) }.to raise_error("Balance too low to touch in. Minimum balance is £#{Oystercard::MINIMUM_BALANCE}")
+      expect { card.touch_in(entry) }.to raise_error("Balance too low to touch in. Minimum fare is £#{Oystercard::MIN_FARE}")
     end
   end
 
