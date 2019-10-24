@@ -1,3 +1,5 @@
+require 'journey'
+
 class Oystercard
   attr_reader :balance, :journey_history
 
@@ -7,7 +9,6 @@ class Oystercard
   def initialize
     @balance = 0
     @journey_history = []
-    @current_journey = {}
   end
 
   def top_up(value)
@@ -19,18 +20,17 @@ class Oystercard
   def touch_in(entry)
     raise "Balance too low to touch in. Minimum fare is £#{MIN_FARE}" if @balance < MIN_FARE
 
-    @current_journey[:entry] = entry
+    @current_journey = Journey.new(entry)
   end
 
   def touch_out(exit)
+    @current_journey.finish(exit)
     deduct(1)
-    @current_journey[:exit] = exit
-    @journey_history << @current_journey
-    @current_journey = {}
+    @journey_history << {entry: @current_journey.entry, exit: @current_journey.exit}
   end
 
   def in_journey?
-    @current_journey.key?(:entry) && !@current_journey.key?(:exit)
+    !@current_journey.complete?
   end
 
   private
