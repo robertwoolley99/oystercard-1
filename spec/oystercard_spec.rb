@@ -13,7 +13,7 @@ describe Oystercard do
     end
 
     it 'balance is reduced by minimum fare' do
-      expect { card.touch_out(exit) }.to change{ card.balance }.by -1
+      expect { card.touch_out(exit) }.to change{ card.balance }.by -Oystercard::MIN_FARE
     end
 
     it 'journey history contains one hash with entry and exit' do

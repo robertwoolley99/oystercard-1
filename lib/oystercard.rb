@@ -24,8 +24,8 @@ class Oystercard
   end
 
   def touch_out(exit)
-    @current_journey.finish(exit)
-    deduct(1)
+    fare = @current_journey.finish(exit)
+    deduct(fare)
     @journey_history << {entry: @current_journey.entry, exit: @current_journey.exit}
   end
 
