@@ -42,10 +42,6 @@ class Oystercard
     @current_journey = nil
   end
 
-  # def in_journey?
-    # !@current_journey.complete?
-  # end
-
   private
 
   def deduct(fare)
