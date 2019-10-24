@@ -6,7 +6,11 @@ class Journey
     @exit = nil
   end
 
+  def finish(exit)
+    @exit = exit
+  end
+
   def complete?
-    !@entry.nil? && !@exit.nil?
+    !@exit.nil?
   end
 end

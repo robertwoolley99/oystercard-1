@@ -6,7 +6,7 @@ describe Journey do
   let(:entry) { double :Station }
   let(:exit) { double :Station }
 
-  context 'after touching in, i.e. on initialization' do
+  context 'on initialization i.e. after touch in' do
     it 'has no entry station by default' do
       expect(journey.entry).to be nil
     end
@@ -25,16 +25,19 @@ describe Journey do
     end
   end
 
-  # context 'after touching in and touching out' do
-    # it 'has an entry station' do
-    # end
+  context 'after touching in and touching out' do
+    before do
+      journey.finish('Waterloo')
+    end
 
-    # it 'has an exit station' do
-    # end
+    it 'has an exit station' do
+      expect(journey.exit).to eq 'Waterloo'
+    end
 
-    # it 'is complete' do
-    # end
-  # end
+    it 'is complete' do
+      expect(journey.complete?).to eq true
+    end
+  end
 end
 
 # FROM OYSTERCARD SPEC
