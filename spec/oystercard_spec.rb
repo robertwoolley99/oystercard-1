@@ -23,20 +23,16 @@ describe Oystercard do
       card.touch_out(exit)
     end
 
-    it 'touch out card sets journey status' do
+    it 'is not "in journey"' do
       expect(card).not_to be_in_journey
     end
 
-    it 'touch out card reduces balance by minimum fare' do
+    it 'balance is reduced by minimum fare' do
       expect { card.touch_out(exit) }.to change{ card.balance }.by -1
     end
 
-    it 'touch out card updates journey history' do
+    it 'journey history contains one hash with entry and exit' do
       expect(card.journey_history).to eq([{ entry: entry, exit: exit }])
-    end
-
-    it 'creates one journey after touch in and out' do
-      expect(card.journey_history.length).to eq 1
     end
   end
 
