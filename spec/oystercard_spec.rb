@@ -13,6 +13,7 @@ describe Oystercard do
     end
 
     it 'balance is reduced by minimum fare' do
+      card.touch_in("St James Park")
       expect { card.touch_out(exit) }.to change{ card.balance }.by -Oystercard::MIN_FARE
     end
 

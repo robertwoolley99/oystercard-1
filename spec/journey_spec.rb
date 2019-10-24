@@ -40,18 +40,22 @@ describe Journey do
   end
 
   context 'calculates fare' do
-    journey_with_entry = Journey.new('Victoria')
+    before do
+      journey_with_entry = Journey.new('Victoria')
 
-    it 'returns minimum fare on finish' do
-      expect(journey_with_entry.finish('Waterloo')).to eq Journey::MIN_FARE
-    end
+      it 'returns minimum fare on finish' do
+        journey_with_entry.finish('Waterloo')
+        expect(journey_with_entry.fare).to eq Journey::MIN_FARE
+      end
 
-    it 'returns penalty fare if no entry station given' do
-      expect(journey.finish('Waterloo')).to eq Journey::PENALTY_FARE
-    end
+      it 'returns penalty fare if no entry station given' do
+        journey.finish('Waterloo')
+        expect(journey.fare).to eq Journey::PENALTY_FARE
+      end
 
-    it 'returns penalty fare if no exit station given' do
-      expect(journey_with_entry.finish).to eq Journey::PENALTY_FARE
+      it 'returns penalty fare if no exit station given' do
+        expect(journey_with_entry.fare).to eq Journey::PENALTY_FARE
+      end
     end
   end
 end
