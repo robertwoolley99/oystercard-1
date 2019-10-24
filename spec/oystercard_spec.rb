@@ -5,26 +5,11 @@ describe Oystercard do
   let(:entry) { double :station }
   let(:exit) { double :station }
 
-  context 'with balance and touch in' do
-    before do
-      card.top_up(50)
-      card.touch_in(entry)
-    end
-
-    it 'is "in journey"' do
-      expect(card).to be_in_journey
-    end
-  end
-
   context 'with balance, touch in and touch out' do
     before do
       card.top_up(50)
       card.touch_in(entry)
       card.touch_out(exit)
-    end
-
-    it 'is not "in journey"' do
-      expect(card).not_to be_in_journey
     end
 
     it 'balance is reduced by minimum fare' do
@@ -53,5 +38,4 @@ describe Oystercard do
       expect { card.top_up 100 }.to raise_error(RuntimeError, "top up limit #{Oystercard::LIMIT} reached")
     end
   end
-
 end
