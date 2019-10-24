@@ -8,11 +8,14 @@ class Journey
 
   def finish(exit = nil)
     @exit = exit
+    fare
   end
 
   def complete?
     !@exit.nil?
   end
+
+  private
 
   def fare
     @entry.nil? || @exit.nil? ? 6 : 1

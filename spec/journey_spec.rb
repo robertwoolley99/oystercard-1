@@ -39,25 +39,19 @@ describe Journey do
     end
   end
 
-  context 'if entry and exit station given' do
+  context 'calculates fare' do
     journey_with_entry = Journey.new('Victoria')
 
-    it 'returns fare of 1' do
-      journey_with_entry.finish('Waterloo')
-      expect(journey_with_entry.fare).to eq 1
+    it 'returns fare of 1 on finish' do
+      expect(journey_with_entry.finish('Waterloo')).to eq 1
     end
-  end
 
-  context 'if entry or exit station not given' do
     it 'returns a fare of 6 if no entry station given' do
-      journey.finish('Waterloo')
-      expect(journey.fare).to eq 6
+      expect(journey.finish('Waterloo')).to eq 6
     end
 
     it 'returns a fare of 6 if no exit station given' do
-      journey_with_entry = Journey.new('Victoria')
-      journey_with_entry.finish
-      expect(journey_with_entry.fare).to eq 6
+      expect(journey_with_entry.finish).to eq 6
     end
   end
 end
