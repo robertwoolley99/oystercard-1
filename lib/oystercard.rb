@@ -24,9 +24,8 @@ class Oystercard
   end
 
   def touch_out(exit)
-    fare = @current_journey.finish(exit)
-    deduct(fare)
-    @journey_history << {entry: @current_journey.entry, exit: @current_journey.exit}
+    deduct_fare
+    update_history
   end
 
   def in_journey?
@@ -35,8 +34,12 @@ class Oystercard
 
   private
 
-  def deduct(value)
-    @balance -= value
+  def deduct_fare
+    fare = @current_journey.finish(exit)
+    @balance -= fare
   end
 
+  def update_history
+    @journey_history << {entry: @current_journey.entry, exit: @current_journey.exit}
+  end
 end
