@@ -25,7 +25,7 @@ describe Journey do
     end
   end
 
-  context 'after touching in and touching out' do
+  context 'after touching out with a station' do
     before do
       journey.finish('Waterloo')
     end
@@ -38,29 +38,26 @@ describe Journey do
       expect(journey.complete?).to eq true
     end
   end
+
+  context 'if entry and exit station given' do
+    journey_with_entry = Journey.new('Victoria')
+
+    it 'returns fare of 1' do
+      journey_with_entry.finish('Waterloo')
+      expect(journey_with_entry.fare).to eq 1
+    end
+  end
+
+  context 'if entry or exit station not given' do
+    it 'returns a fare of 6 if no entry station given' do
+      journey.finish('Waterloo')
+      expect(journey.fare).to eq 6
+    end
+
+    it 'returns a fare of 6 if no exit station given' do
+      journey_with_entry = Journey.new('Victoria')
+      journey_with_entry.finish
+      expect(journey_with_entry.fare).to eq 6
+    end
+  end
 end
-
-# FROM OYSTERCARD SPEC
-  # context 'with balance and touch in' do
-    # before do
-      # card.top_up(50)
-      # card.touch_in(entry)
-    # end
-
-    # it 'is "in journey"' do
-      # expect(card).to be_in_journey
-    # end
-  # end
-
-  # context 'with balance, touch in and touch out' do
-    # before do
-      # card.top_up(50)
-      # card.touch_in(entry)
-      # card.touch_out(exit)
-    # end
-    # it 'is not "in journey"' do
-      # expect(card).not_to be_in_journey
-    # end
-  # end
-
-# end
