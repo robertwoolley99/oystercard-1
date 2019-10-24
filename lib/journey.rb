@@ -1,6 +1,9 @@
 class Journey
   attr_reader :entry, :exit
 
+  MIN_FARE = 1
+  PENALTY_FARE = 6
+
   def initialize(entry = nil)
     @entry = entry
     @exit = nil
@@ -18,6 +21,6 @@ class Journey
   private
 
   def fare
-    @entry.nil? || @exit.nil? ? 6 : 1
+    @entry.nil? || @exit.nil? ? PENALTY_FARE : MIN_FARE
   end
 end
