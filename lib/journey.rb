@@ -9,16 +9,13 @@ class Journey
     @exit = nil
   end
 
-  def finish(exit = nil)
+  def finish(exit)
     @exit = exit
-    fare
   end
 
   def complete?
     !@exit.nil?
   end
-
-  private
 
   def fare
     @entry.nil? || @exit.nil? ? PENALTY_FARE : MIN_FARE
